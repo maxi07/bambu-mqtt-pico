@@ -1,0 +1,19 @@
+{
+    "version": "1.0",
+    "wifi": {
+        "ssid": "your_ssid",
+        "password": "your_password"
+    },
+    "printer": {
+        "ip": "192.168.111.191",
+        "port": 8883,
+        "password": "your_password",
+        "user": "bblp",
+        "serial": "your_serial"
+    },
+    "led": {
+        "pin": 28,
+        "brightness": 0.5,
+        "count": 64
+    }
+}

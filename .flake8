@@ -1,0 +1,7 @@
+[flake8]
+exclude = .git,*migrations*,.vscode,__pycache__,Ressources_test,Ressources_other,Ressources_doc,modules/Microdot,modules/utemplate,tests/microdot*,.venv
+max-line-length = 150
+extend-ignore = E501, F403, F405, E402
+count = True
+statistics = True
+doctests = True
