@@ -8,6 +8,11 @@ SYMBOL_PRINT_ERROR = [([63, 54, 45, 36, 27, 18, 9, 8, 56, 49, 42, 35, 28, 21, 14
 
 
 def show_symbol(symbol: list, color: tuple = (0, 0, 0)):
+    # Clear first
+    for i in range(settings.LED_COUNT):
+        settings.np[i] = (0, 0, 0)
+
+    # Check for valid color
     for value in color:
         if value > 255 or value < 0:
             log_warning("Wrong color was given, using default.")

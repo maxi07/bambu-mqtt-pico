@@ -42,10 +42,12 @@ def sub_cb(topic, msg):
         data = msg.decode("utf-8")
         data_dict = json.loads(data)
         progress = data_dict["print"]["mc_percent"]
+        error_code = int(data_dict["print"]["mc_print_error_code"])
         log_info(f"Current Progress: {progress}")
 
-        if data_dict["print"]["mc_print_error_code"] != 0:
-            log_error(f"Print error code: {data_dict['print']['mc_print_error_code']}")
+        # Check for print error code
+        if error_code != 0:
+            log_error(f"Print error code: {error_code}")
             symbols.show_symbol(symbols.SYMBOL_PRINT_ERROR)
             return
 
