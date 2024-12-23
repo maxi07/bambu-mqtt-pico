@@ -77,6 +77,7 @@ def clear_leds(write: bool = True):
 
 
 clear_leds()
+log_info("Starting MQTT client...")
 
 # Set SSL contect (Micropython v1.23 minimum)
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -99,8 +100,12 @@ log_info(f"Connected to {blue_text(settings.PRINTER_IP)}, subscribed to topic {b
 try:
     while 1:
         c.wait_msg()
+except Exception as e:
+    log_error(f"An error occurred: {e}")
+    symbols.show_symbol(symbols.SYMBOL_ERROR_GENERAL)
 except KeyboardInterrupt:
     log_warning("Keyboard interrupt, disconnecting...")
+    clear_leds()
 finally:
     c.disconnect()
     log_info("User disconnected.")

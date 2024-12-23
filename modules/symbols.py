@@ -3,6 +3,7 @@ from modules import settings
 
 SYMBOL_INTERNET = [([3, 4, 11, 12, 30, 37, 36, 35, 34, 25, 47, 54, 61, 60, 59, 58, 49, 40], (0, 120, 100))]
 SYMBOL_CHECK = [([31, 22, 13, 20, 27, 34, 41, 48], (0, 255, 0))]
+SYMBOL_ERROR_GENERAL = [([58, 59, 60, 61, 62, 54, 46, 38, 37, 36, 30, 22, 14, 6, 5, 4, 3, 2], (255, 0, 0))]
 
 
 def show_symbol(symbol: list, color: tuple = (0, 0, 0)):
