@@ -1,4 +1,8 @@
 from modules.logging import *
+from machine import Pin
+import machine
+import binascii
+from neopixel import NeoPixel
 try:
     import ujson as json
 except ImportError:
@@ -49,5 +53,32 @@ class Config:
             log_error(f"Failed saving {key} setting to config.", ex)
 
 
+def get_client_id():
+    return binascii.hexlify(machine.unique_id())
+
+
 config = Config('config.json')
 """The config to get and set values from/to"""
+
+LED_PIN = config.get('led.pin')
+LED_COUNT = int(config.get('led.count'))
+
+# Colors
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Initialize variables
+SSID = str(config.get('wifi.ssid'))
+PASSWORD = str(config.get('wifi.password'))
+PORT = int(config.get('printer.port'))
+USER_PRINTER = str(config.get('printer.user'))
+PASSWORD_PRINTER = str(config.get('printer.password'))
+PRINTER_IP = str(config.get('printer.ip'))
+TOPIC = f"device/{config.get('printer.serial')}/report"
+CLIENT_ID = get_client_id()
+LED_BRIGHTNESS = float(config.get('led.brightness'))
+
+# LED initialization
+np = NeoPixel(Pin(LED_PIN, Pin.OUT), LED_COUNT)
