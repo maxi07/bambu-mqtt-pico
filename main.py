@@ -44,7 +44,12 @@ def sub_cb(topic, msg):
         progress = data_dict["print"]["mc_percent"]
         log_info(f"Current Progress: {progress}")
 
-        # Write LEDs
+        if data_dict["print"]["mc_print_error_code"] != 0:
+            log_error(f"Print error code: {data_dict['print']['mc_print_error_code']}")
+            symbols.show_symbol(symbols.SYMBOL_PRINT_ERROR)
+            return
+
+        # If the progress is 100, show a checkmark
         if progress == 100:
             clear_leds(False)
             symbols.show_symbol(symbols.SYMBOL_CHECK)
@@ -60,6 +65,7 @@ def sub_cb(topic, msg):
         settings.np.write()
     except Exception as e:
         log_error(f"Received message, but could not parse it: {e}")
+        log_error(f"Message: {msg}")
 
 
 def clear_leds(write: bool = True):
