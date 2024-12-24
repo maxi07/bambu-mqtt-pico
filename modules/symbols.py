@@ -53,5 +53,6 @@ def update_prepare_symbol():
     settings.np[symbol] = settings.BLUE
     settings.np.write()
 
+
 # Initialisiere den Generator
 symbol_generator = next_item_from_list(SYMBOL_PREPARE)

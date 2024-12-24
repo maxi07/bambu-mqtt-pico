@@ -6,8 +6,8 @@ import json
 from modules import symbols
 from modules.logging import *
 import utime as time
-import sys
 from modules.buzzer import BuzzerMelody
+import machine
 
 
 def connect_wifi():
@@ -141,4 +141,5 @@ except KeyboardInterrupt:
     clear_leds()
 finally:
     c.disconnect()
-    log_info("User disconnected.")
+    log_info("Disconnected.")
+    machine.reset()
