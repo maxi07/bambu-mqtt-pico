@@ -15,5 +15,8 @@
         "pin": 28,
         "brightness": 0.5,
         "count": 64
+    },
+    "buzzer": {
+        "pin": 16
     }
 }

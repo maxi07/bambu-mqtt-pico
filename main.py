@@ -7,6 +7,7 @@ from modules import symbols
 from modules.logging import *
 import utime as time
 import sys
+from modules.buzzer import BuzzerMelody
 
 
 def connect_wifi():
@@ -38,6 +39,7 @@ def connect_wifi():
 
 
 def sub_cb(topic, msg):
+    global last_progress
     try:
         data = msg.decode("utf-8")
         data_dict = json.loads(data)
@@ -53,9 +55,16 @@ def sub_cb(topic, msg):
 
         # If the progress is 100, show a checkmark
         if progress == 100:
+            if last_progress == 99:
+                last_progress = 100
+                log_info("Print finished, playing buzzer melody.")
+                player = BuzzerMelody()
+                player._playsong("cantinaband")
             clear_leds(False)
             symbols.show_symbol(symbols.SYMBOL_CHECK)
             return
+        else:
+            last_progress = progress
 
         clear_leds(False)
         progress_leds = int(progress * settings.LED_COUNT / 100)
@@ -104,6 +113,8 @@ c.set_callback(sub_cb)
 c.connect()
 c.subscribe(settings.TOPIC)
 log_info(f"Connected to {blue_text(settings.PRINTER_IP)}, subscribed to topic {blue_text(settings.TOPIC)}")
+last_progress = 0
+
 
 try:
     while 1:
