@@ -76,7 +76,6 @@ class BuzzerMelody:
         matching_songs = [value for key, value in self.songs.items() if key.lower() == song.lower()]
         if matching_songs:
             melody_rtttl = matching_songs[0]
-            log_info("Playing song", song)
         else:
             log_warning(f"Melody '{song}' not found in player.songs, playing default.")
             melody_rtttl = self.songs['Beep']

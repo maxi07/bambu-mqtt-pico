@@ -30,6 +30,7 @@ def connect_wifi():
         log_error("Could not connect to Wifi.")
         clear_leds()
         symbols.show_symbol(symbols.SYMBOL_INTERNET, settings.RED)
+        import sys
         sys.exit()
         return
     else:
