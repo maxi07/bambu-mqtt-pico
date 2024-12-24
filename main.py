@@ -45,8 +45,10 @@ def sub_cb(topic, msg):
         data_dict = json.loads(data)
         progress = data_dict["print"]["mc_percent"]
         error_code = int(data_dict["print"]["mc_print_error_code"])
-        log_info(f"Current Progress: {progress}")
-
+        print_stage = data_dict["print"]["mc_print_stage"]
+        upload_status = data_dict["print"]["upload"]["status"]
+        upload_progress = data_dict["print"]["upload"]["progress"]
+        log_info(f"Progress: {progress} | Error code: {error_code} | Print stage: {print_stage} | Upload status: {upload_status} | Upload progress: {upload_progress} ")
         # Check for print error code
         if error_code != 0:
             log_error(f"Print error code: {error_code}")
@@ -74,6 +76,9 @@ def sub_cb(topic, msg):
             else:
                 settings.np[i] = (0, 0, 0)
         settings.np.write()
+    except ValueError:
+        log_warning("Unsupported message received.")
+        # log_warning(f"Message: {msg}")
     except Exception as e:
         log_error(f"Received message, but could not parse it: {e}")
         log_error(f"Message: {msg}")
