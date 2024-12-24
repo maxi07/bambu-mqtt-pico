@@ -55,6 +55,11 @@ def sub_cb(topic, msg):
             symbols.show_symbol(symbols.SYMBOL_PRINT_ERROR)
             return
 
+        # Check for print stage, 1 means preparing, 2 means printing
+        if print_stage == 1:
+            symbols.update_prepare_symbol()
+            return
+
         # If the progress is 100, show a checkmark
         if progress == 100:
             if last_progress == 99:
@@ -77,8 +82,10 @@ def sub_cb(topic, msg):
                 settings.np[i] = (0, 0, 0)
         settings.np.write()
     except ValueError:
-        log_warning("Unsupported message received.")
+        log_warning("MEssage could not be decoded.")
         # log_warning(f"Message: {msg}")
+    except KeyError as keyex:
+        log_warning(f"Unsupported message, expected key not found: {keyex}")
     except Exception as e:
         log_error(f"Received message, but could not parse it: {e}")
         log_error(f"Message: {msg}")
@@ -126,6 +133,8 @@ try:
         c.wait_msg()
 except Exception as e:
     log_error(f"An error occurred: {e}")
+    import sys
+    sys.print_exception(e)
     symbols.show_symbol(symbols.SYMBOL_ERROR_GENERAL)
 except KeyboardInterrupt:
     log_warning("Keyboard interrupt, disconnecting...")
