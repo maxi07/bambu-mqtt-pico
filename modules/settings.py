@@ -32,7 +32,7 @@ class Config:
             for k in keys:
                 value = value.get(k, {})
             # log_info(f"Read config key {key} with value {value} of type {type(value)}")
-            return value if value is not None else default
+            return value or default
         except Exception as ex:
             log_error("Failed reading config.", ex)
             return default
