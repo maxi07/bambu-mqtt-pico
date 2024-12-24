@@ -7,7 +7,6 @@ from modules import symbols
 from modules.logging import *
 import utime as time
 from modules.buzzer import BuzzerMelody
-import machine
 
 
 def connect_wifi():
@@ -44,14 +43,14 @@ def sub_cb(topic, msg):
     try:
         data = msg.decode("utf-8")
         data_dict = json.loads(data)
-        progress = data_dict["print"]["mc_percent"]
+        progress = int(data_dict["print"]["mc_percent"])
         error_code = int(data_dict["print"]["mc_print_error_code"])
-        print_stage = data_dict["print"]["mc_print_stage"]
+        print_stage = int(data_dict["print"]["mc_print_stage"])
         upload_status = data_dict["print"]["upload"]["status"]
-        upload_progress = data_dict["print"]["upload"]["progress"]
-        log_info(f"Progress: {progress} | Error code: {error_code} | Print stage: {print_stage} | Upload status: {upload_status} | Upload progress: {upload_progress} ")
+        gcode = data_dict["print"]["gcode_state"]
+        log_info(f"Progress: {progress} | Error code: {error_code} | Print stage: {print_stage} | Upload status: {upload_status} | GCode: {gcode}")
         # Check for print error code
-        if error_code != 0:
+        if error_code != 0 or gcode.lower() == "FAILED".lower():
             log_error(f"Print error code: {error_code}")
             symbols.show_symbol(symbols.SYMBOL_PRINT_ERROR)
             return
@@ -75,7 +74,7 @@ def sub_cb(topic, msg):
             last_progress = progress
 
         clear_leds(False)
-        progress_leds = int(progress * settings.LED_COUNT / 100)
+        progress_leds = max(int(progress * settings.LED_COUNT / 100), 1)
         for i in range(settings.LED_COUNT):
             if i < progress_leds:
                 settings.np[i] = (int(0 * settings.LED_BRIGHTNESS), int(255 * settings.LED_BRIGHTNESS), int(0 * settings.LED_BRIGHTNESS))
@@ -107,12 +106,12 @@ def clear_leds(write: bool = True):
 
 
 clear_leds()
-log_info("Starting MQTT client...")
-
 # Set SSL contect (Micropython v1.23 minimum)
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 context.verify_mode = ssl.CERT_NONE
 connect_wifi()
+log_info("Starting MQTT client...")
+
 
 c = MQTTClient(settings.CLIENT_ID,
                settings.PRINTER_IP,
@@ -123,7 +122,14 @@ c = MQTTClient(settings.CLIENT_ID,
                ssl=context)
 # Subscribed messages will be delivered to this callback
 c.set_callback(sub_cb)
-c.connect()
+try:
+    c.connect(timeout=20)
+except MQTTException as mqttex:
+    log_error(f"Could not connect to MQTT protocoll, wrong password? Code {mqttex}")
+except Exception as e:
+    log_error(f"Could not connect to MQTT protocoll: {e}")
+    import machine
+    machine.reset()
 c.subscribe(settings.TOPIC)
 log_info(f"Connected to {blue_text(settings.PRINTER_IP)}, subscribed to topic {blue_text(settings.TOPIC)}")
 last_progress = 0
@@ -143,4 +149,5 @@ except KeyboardInterrupt:
 finally:
     c.disconnect()
     log_info("Disconnected.")
+    import machine
     machine.reset()
