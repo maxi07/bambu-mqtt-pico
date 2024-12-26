@@ -39,7 +39,7 @@ def connect_wifi():
 
 
 def sub_cb(topic, msg):
-    global last_progress
+    global played_buzzer
     try:
         data = msg.decode("utf-8")
         data_dict = json.loads(data)
@@ -50,30 +50,33 @@ def sub_cb(topic, msg):
         gcode = data_dict["print"]["gcode_state"]
         log_info(f"Progress: {progress} | Error code: {error_code} | Print stage: {print_stage} | Upload status: {upload_status} | GCode: {gcode}")
         # Check for print error code
-        if error_code != 0 or gcode.lower() == "FAILED".lower():
-            log_error(f"Print error code: {error_code}")
+        if error_code != 0 or gcode == "FAILED":
+            log_info(f"Print error code: {error_code}")
             symbols.show_symbol(symbols.SYMBOL_PRINT_ERROR)
+            return
+
+        if gcode == "FINISH":
+            log_info("Print finished.")
+            if played_buzzer is False:
+                player = BuzzerMelody()
+                player._playsong("cantinaband")
+                played_buzzer = True
+            symbols.show_symbol(symbols.SYMBOL_CHECK)
+            return
+
+        if gcode == "PAUSE":
+            log_info("Print paused.")
+            symbols.show_symbol(symbols.SYMBOL_PAUSE)
             return
 
         # Check for print stage, 1 means preparing, 2 means printing
         if print_stage == 1:
+            log_info("Print stage is 1, showing prepare symbol.")
             symbols.update_prepare_symbol()
             return
 
-        # If the progress is 100, show a checkmark
-        if progress == 100:
-            if last_progress == 99:
-                last_progress = 100
-                log_info("Print finished, playing buzzer melody.")
-                player = BuzzerMelody()
-                player._playsong("cantinaband")
-            clear_leds(False)
-            symbols.show_symbol(symbols.SYMBOL_CHECK)
-            return
-        else:
-            last_progress = progress
-
         clear_leds(False)
+        played_buzzer = False
         progress_leds = max(int(progress * settings.LED_COUNT / 100), 1)
         for i in range(settings.LED_COUNT):
             if i < progress_leds:
@@ -132,7 +135,7 @@ except Exception as e:
     machine.reset()
 c.subscribe(settings.TOPIC)
 log_info(f"Connected to {blue_text(settings.PRINTER_IP)}, subscribed to topic {blue_text(settings.TOPIC)}")
-last_progress = 0
+played_buzzer: bool = True
 
 
 try:
