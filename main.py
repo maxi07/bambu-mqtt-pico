@@ -1,6 +1,7 @@
 import network
 import modules.settings as settings
 from modules.uqmtt import MQTTClient
+from modules.uqmtt import MQTTException
 import ssl
 import json
 from modules import symbols
@@ -127,12 +128,17 @@ c = MQTTClient(settings.CLIENT_ID,
 c.set_callback(sub_cb)
 try:
     c.connect(timeout=20)
-except MQTTException as mqttex:
-    log_error(f"Could not connect to MQTT protocoll, wrong password? Code {mqttex}")
+except MQTTException as e:
+    log_error(f"Could not connect to MQTT protocoll, wrong password? {e}")
+    symbols.show_symbol(symbols.SYMBOL_LOCKED)
+    import sys
+    sys.exit(-1)
 except Exception as e:
     log_error(f"Could not connect to MQTT protocoll: {e}")
+    import sys
+    sys.print_exception(e)
     import machine
-    machine.reset()
+    # machine.reset()
 c.subscribe(settings.TOPIC)
 log_info(f"Connected to {blue_text(settings.PRINTER_IP)}, subscribed to topic {blue_text(settings.TOPIC)}")
 played_buzzer: bool = True
