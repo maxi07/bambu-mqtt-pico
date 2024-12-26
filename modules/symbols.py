@@ -44,8 +44,8 @@ def next_item_from_list(items):
 
 def update_prepare_symbol():
     """When print stage is eq 1, we show the prepare symbol"""
-    global symbol_generator
-    symbol = next(symbol_generator)
+    global symbol_generator_prepare
+    symbol = next(symbol_generator_prepare)
 
     # Clear first
     for i in range(settings.LED_COUNT):
@@ -55,5 +55,26 @@ def update_prepare_symbol():
     settings.np.write()
 
 
+def update_check_symbol():
+    """When print stage is eq 2, we show the check symbol and animate the LEDs"""
+    global symbol_generator
+
+    # Clear first
+    for i in range(settings.LED_COUNT):
+        settings.np[i] = (0, 0, 0)
+
+    # Set check symbol
+    for pixel_indices, rgb_color in SYMBOL_CHECK:
+        r, g, b = rgb_color
+        for pixel_index in pixel_indices:
+            settings.np[pixel_index] = (r, g, b)
+
+    # Set darker green dot
+    green_dot = next(symbol_generator_check)
+    settings.np[green_dot] = settings.DARK_GREEN
+    settings.np.write()
+
+
 # Initialisiere den Generator
-symbol_generator = next_item_from_list(SYMBOL_PREPARE)
+symbol_generator_prepare = next_item_from_list(SYMBOL_PREPARE)
+symbol_generator_check = next_item_from_list(SYMBOL_CHECK[0][0])  # With index as this is not a normal list

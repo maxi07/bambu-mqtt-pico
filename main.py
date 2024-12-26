@@ -61,7 +61,7 @@ def sub_cb(topic, msg):
                 player = BuzzerMelody()
                 player._playsong("cantinaband")
                 played_buzzer = True
-            symbols.show_symbol(symbols.SYMBOL_CHECK)
+            symbols.update_check_symbol()
             return
 
         if gcode == "PAUSE":
@@ -149,6 +149,8 @@ except Exception as e:
 except KeyboardInterrupt:
     log_warning("Keyboard interrupt, disconnecting...")
     clear_leds()
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(False)
 finally:
     c.disconnect()
     log_info("Disconnected.")
