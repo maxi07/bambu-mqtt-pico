@@ -155,10 +155,10 @@ except Exception as e:
 except KeyboardInterrupt:
     log_warning("Keyboard interrupt, disconnecting...")
     clear_leds()
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(False)
 finally:
     c.disconnect()
     log_info("Disconnected.")
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(False)
     import machine
     machine.reset()
