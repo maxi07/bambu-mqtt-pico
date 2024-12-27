@@ -1,0 +1,40 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.languageServer": "Pylance",
+		"micropico.pyIgnore": [
+			"**/.picowgo",
+			"**/.micropico",
+			"**/.vscode",
+			"**/.gitignore",
+			"**/.git",
+			"**/.DS_Store",
+			"**/project.pico-go",
+			"**/env",
+			"**/venv",
+			"**/.venv",
+			"**/.idea",
+			"**/doc"
+		],
+		"micropico.syncFileTypes": [
+			"py",
+			"txt",
+			"log",
+			"json",
+			"xml",
+			"html",
+			"js",
+			"css",
+			"mpy",
+			"ico",
+			"png",
+			"xml",
+			"svg",
+			"webmanifest"
+		]
+	}
+}

@@ -1,0 +1,1 @@
+Icons provided by [Reshot](https://www.reshot.com/), under the [Reshot Free License](https://www.reshot.com/license/)

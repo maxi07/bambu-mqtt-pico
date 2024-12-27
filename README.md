@@ -9,6 +9,7 @@ This program has been tested for [Bambu Lab X1C Printer](https://eu.store.bambul
 - [x] Show printer error ❌
 - [x] Show preparation progress 🟦
 - [x] Play buzzer sound if finished
+- [x] Change printer access code via webinterface
 
 ## Setup
 Please edit the `config.json` file and add your details:
@@ -19,7 +20,7 @@ Please edit the `config.json` file and add your details:
 - Printer serial (Settings -> General)
 
 > [!IMPORTANT]  
-> The printer password resets automatically after restarting the printer.
+> The printer password resets automatically after restarting the printer. You can change the password by opening the picos webinterface on its ip-address (port 80)
 
 Other optioanl features, such as brightness can be configured via the `config.json` file.
 
