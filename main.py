@@ -3,7 +3,7 @@ import modules.settings as settings
 import gc
 import network
 from modules.led_controller import clear_leds
-from modules.wifi import connect_wifi
+from modules.wifi import connect_wifi, set_time
 from modules.logging import *
 import modules.routing as routing
 
@@ -21,6 +21,7 @@ async def main_loop():
 
 clear_leds()
 connect_wifi()
+set_time()
 gc.collect()
 routing.register_routes()
 
@@ -34,7 +35,9 @@ except KeyboardInterrupt:
     import machine
     # machine.reset()
 except Exception as e:
+    log_error(f"An error occured: {e}")
     import sys
     sys.print_exception(e)  # type: ignore
+    log_exception_to_file(e)
     import machine
     machine.reset()
