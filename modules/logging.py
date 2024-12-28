@@ -58,6 +58,12 @@ def log_error(*args, **kwargs):
     _saveLog(msg)
 
 
+def log_exception_to_file(e: Exception):
+    import sys
+    with open("log.log", "a+") as file:
+        sys.print_exception(e, file)  # type: ignore
+
+
 def _prefix(type: int) -> str:
     now = time.localtime()
     timestamp = "{}.{}.{}".format(pre_zero(now[2]), pre_zero(now[1]), pre_zero(now[0])) + " " + "{}:{}:{}".format(pre_zero(now[3]), pre_zero(now[4]), pre_zero(now[5]))
