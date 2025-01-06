@@ -107,6 +107,8 @@ async def main_loop():
         while 1:
             c.wait_msg()
             await asyncio.sleep(0.1)
+    except OSError:
+        log_error("uqmtt returned OSError -1, probably lost connection.")
     except Exception as e:
         log_error(f"An error occurred: {e}")
         import sys
@@ -114,6 +116,7 @@ async def main_loop():
         log_exception_to_file(e)
         symbols.show_symbol(symbols.SYMBOL_ERROR_GENERAL)
         time.sleep(5)
+    finally:
         import machine
         machine.reset()
 

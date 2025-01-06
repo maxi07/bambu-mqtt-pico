@@ -4,6 +4,7 @@ from modules.logging import *
 import modules.symbols as symbols
 from modules.led_controller import clear_leds
 import time
+import machine
 import ntptime
 
 
@@ -27,8 +28,7 @@ def connect_wifi():
         log_error("Could not connect to Wifi.")
         clear_leds()
         symbols.show_symbol(symbols.SYMBOL_INTERNET, settings.RED)
-        import sys
-        sys.exit()
+        machine.reset()
         return
     else:
         clear_leds()
@@ -46,6 +46,5 @@ def set_time():
         log_info(f"Time set to {formatted_time}.")
     except Exception as e:
         log_error(f"Could not set time: {e}")
-        import sys
-        sys.exit()
+        machine.reset()
         return
