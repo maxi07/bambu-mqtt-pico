@@ -15,6 +15,7 @@ import gc
 def sub_cb(topic, msg):
     global played_buzzer
     try:
+        gc.collect()
         data = msg.decode("utf-8")
         data_dict = json.loads(data)
 
@@ -35,22 +36,22 @@ def sub_cb(topic, msg):
             return
 
         if gcode == "FINISH":
-            # log_info("Print finished.")
+            log_info("Print finished.")
+            symbols.update_check_symbol()
             if played_buzzer is False:
                 player = BuzzerMelody()
                 player._playsong("cantinaband")
                 played_buzzer = True
-            symbols.update_check_symbol()
             return
 
         if gcode == "PAUSE":
-            # log_info("Print paused.")
+            log_info("Print paused.")
             symbols.show_symbol(symbols.SYMBOL_PAUSE)
             return
 
         # Check for print stage, 1 means preparing, 2 means printing
         if gcode == "PREPARE":
-            # log_info("Print stage is 1, showing prepare symbol.")
+            ("Print stage is 1, showing prepare symbol.")
             symbols.update_prepare_symbol()
             return
 
