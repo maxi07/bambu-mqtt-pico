@@ -1,5 +1,5 @@
 {
-    "version": "1.0",
+    "version": "1.1",
     "wifi": {
         "ssid": "your_ssid",
         "password": "your_password"
