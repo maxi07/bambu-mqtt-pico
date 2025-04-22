@@ -1,3 +1,4 @@
+from array import array
 from modules.logging import *
 from machine import Pin
 import machine
@@ -60,6 +61,9 @@ config = Config('config.json')
 
 LED_PIN = config.get('led.pin', 28)
 LED_COUNT = int(config.get('led.count', 64))
+LED_WIDTH = int(config.get('led.width', 8))
+LED_HEIGHT = int(config.get('led.height', 8))
+CURRENT_ARRAY = array('i', list(range(63, -1, -1)))
 
 # Colors
 YELLOW = (255, 255, 0)
