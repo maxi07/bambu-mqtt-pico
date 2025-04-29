@@ -10,6 +10,7 @@ from modules.led_controller import clear_leds
 import uasyncio as asyncio
 import network  # Für WLAN-Verbindung prüfen
 import gc
+import machine
 
 
 def sub_cb(topic, msg):
@@ -124,6 +125,7 @@ async def main_loop():
             context.verify_mode = ssl.CERT_NONE
             log_info("Starting MQTT client...")
             connected: bool = False
+            symbols.show_symbol(symbols.SYMBOL_INTERNET, settings.DARK_GREEN)
 
             while not connected:
                 try:
@@ -141,12 +143,22 @@ async def main_loop():
                     c.connect(timeout=20)
                     connected = True
                 except MQTTException as e:
-                    log_error(f"Could not connect to MQTT protocol, wrong password? {e}")
+                    log_warning(f"Could not connect to MQTT protocol, wrong password? {e}")
                     symbols.show_symbol(symbols.SYMBOL_LOCKED)
+                    continue
+                except OSError as e:
+                    if e.errno == 115:
+                        log_warning("Could not connect to MQTT protocol, timeout. Is the printer IP correct?")
+                        symbols.show_symbol(symbols.SYMBOL_IP, settings.YELLOW)
+                    else:
+                        log_error(f"Could not connect to MQTT protocol, OSError: {e}")
+                        symbols.show_symbol(symbols.SYMBOL_ERROR_GENERAL)
+                    continue
                 except Exception as e:
                     log_error(f"Could not connect to MQTT protocol: {e}")
                     import sys
                     sys.print_exception(e)  # type:ignore
+                    continue
                 await asyncio.sleep(5)
 
             topic = f"device/{settings.config.get('printer.serial', 'unknown ip')}/report"
@@ -177,6 +189,7 @@ async def main_loop():
             log_exception_to_file(e)
             symbols.show_symbol(symbols.SYMBOL_ERROR_GENERAL)
             await asyncio.sleep(5)
+            machine.reset()
         finally:
             if 'c' in locals() and c:
                 c.disconnect()  # Ensure proper cleanup of MQTT client
