@@ -13,7 +13,7 @@ This program has been tested for [Bambu Lab X1C Printer](https://eu.store.bambul
 
 ## Setup
 > [!IMPORTANT]  
-> With the latest update, `LAN only` and `developer mode` need to be enabled. BambuLab made the decision to either have you control the printer via its software OR control it locally. Please refer to the [BambuLab turial](https://wiki.bambulab.com/en/knowledge-sharing/enable-developer-mode) on how to enable this mode.
+> With the latest update, `LAN only` and `developer mode` need to be enabled. BambuLab made the decision to either have you control the printer via its software OR control it locally. Please refer to the [BambuLab tutorial](https://wiki.bambulab.com/en/knowledge-sharing/enable-developer-mode) on how to enable this mode.
 Please edit the `config.json` file and add your details:
 - SSID
 - SSID password
