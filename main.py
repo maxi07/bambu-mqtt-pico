@@ -6,6 +6,7 @@ from modules.led_controller import clear_leds
 from modules.wifi import connect_wifi, set_time
 from modules.logging import *
 import modules.routing as routing
+from modules.scroll_text import scroll_text
 
 
 async def main():
@@ -20,10 +21,11 @@ async def main_loop():
     await main_loop.start_main_loop()
 
 clear_leds()
-connect_wifi()
+ip = connect_wifi()
 set_time()
 gc.collect()
 routing.register_routes()
+scroll_text("IP: " + ip)
 
 try:
     asyncio.run(main())

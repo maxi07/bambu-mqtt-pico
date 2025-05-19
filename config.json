@@ -1,20 +1,22 @@
 {
-    "version": "1.0",
+    "version": "1.1",
     "wifi": {
-        "ssid": "your_ssid",
-        "password": "your_password"
+        "ssid": "Entenhausen",
+        "password": "susanne@1970"
     },
     "printer": {
         "ip": "192.168.111.191",
         "port": 8883,
-        "password": "your_password",
+        "password": "a344fdfb",
         "user": "bblp",
-        "serial": "your_serial"
+        "serial": "00M09D491002812"
     },
     "led": {
         "pin": 28,
         "brightness": 0.5,
-        "count": 64
+        "count": 64,
+        "width": 8,
+        "height": 8
     },
     "buzzer": {
         "pin": 16

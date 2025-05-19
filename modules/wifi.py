@@ -8,7 +8,7 @@ import machine
 import ntptime
 
 
-def connect_wifi():
+def connect_wifi() -> str:
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     if not wlan.isconnected():
@@ -34,6 +34,7 @@ def connect_wifi():
         clear_leds()
         symbols.show_symbol(symbols.SYMBOL_INTERNET, settings.GREEN)
         log_info('Connected to Wifi, network config:', wlan.ifconfig())
+        return wlan.ifconfig()[0]
 
 
 def set_time():
