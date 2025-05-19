@@ -12,6 +12,8 @@ This program has been tested for [Bambu Lab X1C Printer](https://eu.store.bambul
 - [x] Change printer access code via webinterface
 
 ## Setup
+> [!IMPORTANT]  
+> With the latest update, `LAN only` and `developer mode` need to be enabled. BambuLab made the decision to either have you control the printer via its software OR control it locally. Please refer to the [BambuLab turial](https://wiki.bambulab.com/en/knowledge-sharing/enable-developer-mode) on how to enable this mode.
 Please edit the `config.json` file and add your details:
 - SSID
 - SSID password
@@ -23,6 +25,3 @@ Please edit the `config.json` file and add your details:
 > The printer password resets automatically after restarting the printer. You can change the password by opening the picos webinterface on its ip-address (port 80)
 
 Other optioanl features, such as brightness can be configured via the `config.json` file.
-
-> [!NOTE]  
-> Only LAN mode can be either turned on or off and is not necessary.
