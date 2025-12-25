@@ -24,4 +24,4 @@ Please edit the `config.json` file and add your details:
 > [!IMPORTANT]  
 > The printer password resets automatically after restarting the printer. You can change the password by opening the picos webinterface on its ip-address (port 80)
 
-Other optioanl features, such as brightness can be configured via the `config.json` file.
+Other optional features, such as brightness can be configured via the `config.json` file.
